@@ -17,4 +17,3 @@ public class ChargePaymentWorker {
     LOG.info("charge-payment completed: {}", job.getKey());
   }
 }
-

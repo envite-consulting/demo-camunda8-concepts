@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "camunda": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp/cluster"
+    },
+    "camunda docs": {
+      "type": "http",
+      "url": "https://camunda-docs.mcp.kapa.ai"
+    }
+  }
+}

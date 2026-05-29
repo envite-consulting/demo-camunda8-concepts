@@ -19,4 +19,3 @@ public class ShipItemsWorker {
     return Map.of();
   }
 }
-

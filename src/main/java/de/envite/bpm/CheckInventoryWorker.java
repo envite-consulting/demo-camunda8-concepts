@@ -15,12 +15,11 @@ public class CheckInventoryWorker {
   private static final Logger LOG = LoggerFactory.getLogger(CheckInventoryWorker.class);
 
   @JobWorker(type = "check-inventory")
-  public Map<String, String> checkInventory(final ActivatedJob job,
-                                            @Variable(name = "item") @Nullable String itemOrdered) {
+  public Map<String, String> checkInventory(
+      final ActivatedJob job, @Variable(name = "item") @Nullable String itemOrdered) {
     String item = (itemOrdered == null || itemOrdered.isEmpty()) ? "default-item" : itemOrdered;
     LOG.info("Checking inventory for item: {}", item);
     LOG.info("check-inventory completed for job: {}", job.getKey());
     return Map.of("item", item + " allocated");
   }
 }
-

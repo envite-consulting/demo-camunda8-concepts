@@ -10,4 +10,3 @@ public class ProcessOrderApplication {
     SpringApplication.run(ProcessOrderApplication.class, args);
   }
 }
-
