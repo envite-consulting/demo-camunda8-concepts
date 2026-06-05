@@ -146,7 +146,7 @@ PI=$(c8ctl --json create pi --bpmnProcessId demo-camunda-jboss-plugin-replacemen
        --variables '{"item":"book"}' 2>/dev/null | jq -r '.key')
 
 # 2. Check H2 immediately after creation — should see one CREATING row.
-./check-h2.sh
+./check-h2.sh latest
 
 # 3. Complete the user task.
 UT=$(c8ctl --json list ut --state created 2>/dev/null \
@@ -154,7 +154,7 @@ UT=$(c8ctl --json list ut --state created 2>/dev/null \
 c8ctl complete ut "$UT"
 
 # 4. After ~1s, check H2 again — should now see two rows for this PI.
-./check-h2.sh
+./check-h2.sh latest
 ```
 
 **Pass condition**: ≥ 2 rows in `USER_TASK_STATUS_EVENT` for `process_instance_key = $PI`, with `event_type` values `CREATING` and `COMPLETING` and `element_id = Activity_ApproveOrder`. The Spring Boot log shows a matching pair of `Tracked user task event:` lines.
