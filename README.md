@@ -208,7 +208,8 @@ curl -sS -X PATCH http://127.0.0.1:8080/v2/jobs/$JOB \
 curl -sS -X POST http://127.0.0.1:8080/v2/incidents/$INC/resolution
 
 sleep 7
-./check-h2.sh "SELECT incident_key, state, last_synced_at FROM incident_record WHERE incident_key = $INC"
+./check-h2.sh records
+./check-h2.sh record-count
 ```
 
 **Pass condition**: same `incident_key` row, but `state = RESOLVED` and `last_synced_at` is more recent than the prior check. The Spring Boot log shows a matching `Incident <key> state transition: ACTIVE → RESOLVED` line emitted by `IncidentPoller`.
