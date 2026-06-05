@@ -1,4 +1,4 @@
-package de.envite.bpm.incidents;
+package de.envite.bpm.incident.poller;
 
 import io.camunda.client.api.search.response.Incident;
 import jakarta.persistence.Column;

@@ -1,4 +1,4 @@
-package de.envite.bpm.incidents;
+package de.envite.bpm.incident.webhook;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.OffsetDateTime;

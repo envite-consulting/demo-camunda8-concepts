@@ -1,6 +1,6 @@
-package de.envite.bpm.incidents;
+package de.envite.bpm.incident.webhook;
 
-import de.envite.bpm.incidents.AlertWebhookPayload.Alert;
+import de.envite.bpm.incident.webhook.AlertWebhookPayload.Alert;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

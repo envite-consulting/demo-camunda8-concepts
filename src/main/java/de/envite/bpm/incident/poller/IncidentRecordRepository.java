@@ -1,4 +1,4 @@
-package de.envite.bpm.incidents;
+package de.envite.bpm.incident.poller;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
