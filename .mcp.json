@@ -1,5 +1,5 @@
 {
-  "servers": {
+  "mcpServers": {
     "camunda": {
       "type": "http",
       "url": "http://localhost:8080/mcp/cluster"
