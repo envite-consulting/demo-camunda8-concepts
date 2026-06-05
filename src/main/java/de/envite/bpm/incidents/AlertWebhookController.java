@@ -10,8 +10,8 @@ import java.util.HexFormat;
 import java.util.List;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,23 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/alerts")
+@RequiredArgsConstructor
+@Slf4j
 public class AlertWebhookController {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AlertWebhookController.class);
   private static final String SIGNATURE_HEADER = "X-Camunda-Signature-256";
   private static final String HMAC_ALGORITHM = "HmacSHA256";
 
   private final IncidentAlertRepository repository;
-  private final String hmacSecret;
+
+  @Value("${app.alerts.webhook.hmac-secret:}")
+  private String hmacSecret;
+
   private final ObjectMapper objectMapper =
       JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-  public AlertWebhookController(
-      IncidentAlertRepository repository,
-      @Value("${app.alerts.webhook.hmac-secret:}") String hmacSecret) {
-    this.repository = repository;
-    this.hmacSecret = hmacSecret;
-  }
 
   @PostMapping(path = "/incidents", consumes = "application/json")
   public ResponseEntity<Void> receive(
@@ -46,7 +43,7 @@ public class AlertWebhookController {
       @RequestBody byte[] rawBody) {
 
     if (!hmacSecret.isBlank() && !signatureMatches(rawBody, signature)) {
-      LOG.warn("Rejecting alert webhook: HMAC signature missing or invalid");
+      log.warn("Rejecting alert webhook: HMAC signature missing or invalid");
       return ResponseEntity.status(401).build();
     }
 
@@ -54,7 +51,7 @@ public class AlertWebhookController {
     try {
       payload = objectMapper.readValue(rawBody, AlertWebhookPayload.class);
     } catch (Exception e) {
-      LOG.warn("Rejecting alert webhook: failed to parse JSON body: {}", e.getMessage());
+      log.warn("Rejecting alert webhook: failed to parse JSON body: {}", e.getMessage());
       return ResponseEntity.badRequest().build();
     }
 
@@ -62,26 +59,10 @@ public class AlertWebhookController {
         payload.alerts() == null ? List.of() : payload.alerts();
     Instant receivedAt = Instant.now();
 
-    for (AlertWebhookPayload.Alert alert : alerts) {
-      IncidentAlert row = new IncidentAlert();
-      row.setClusterName(payload.clusterName());
-      row.setClusterId(payload.clusterId());
-      row.setOperateBaseUrl(payload.operateBaseUrl());
-      row.setClusterUrl(payload.clusterUrl());
-      row.setOperateUrl(alert.operateUrl());
-      row.setProcessInstanceId(alert.processInstanceId());
-      row.setErrorMessage(alert.errorMessage());
-      row.setErrorType(alert.errorType());
-      row.setFlowNodeId(alert.flowNodeId());
-      row.setJobKey(alert.jobKey());
-      row.setCreationTime(alert.creationTime());
-      row.setProcessName(alert.processName());
-      row.setProcessVersion(alert.processVersion());
-      row.setProcessVersionTag(alert.processVersionTag());
-      row.setReceivedAt(receivedAt);
-      IncidentAlert saved = repository.save(row);
-      LOG.info("Persisted incident alert: {}", saved);
-    }
+    alerts.stream()
+        .map(alert -> IncidentAlert.build(alert, payload, receivedAt))
+        .map(repository::save)
+        .forEach(saved -> log.info("Persisted incident alert: {}", saved));
 
     return ResponseEntity.noContent().build();
   }
@@ -102,7 +83,7 @@ public class AlertWebhookController {
       }
       return MessageDigest.isEqual(expected, provided);
     } catch (Exception e) {
-      LOG.error("HMAC verification failed unexpectedly", e);
+      log.error("HMAC verification failed unexpectedly", e);
       return false;
     }
   }

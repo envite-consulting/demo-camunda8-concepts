@@ -4,23 +4,18 @@ import io.camunda.client.CamundaClient;
 import io.camunda.client.api.search.response.Incident;
 import io.camunda.client.api.search.response.SearchResponse;
 import java.time.Instant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class IncidentPoller {
-
-  private static final Logger LOG = LoggerFactory.getLogger(IncidentPoller.class);
 
   private final CamundaClient camundaClient;
   private final IncidentRecordRepository repository;
-
-  public IncidentPoller(CamundaClient camundaClient, IncidentRecordRepository repository) {
-    this.camundaClient = camundaClient;
-    this.repository = repository;
-  }
 
   @Scheduled(fixedDelayString = "${app.incidents.poll-interval:PT5S}", initialDelayString = "PT2S")
   public void sync() {
@@ -34,7 +29,7 @@ public class IncidentPoller {
               .send()
               .join();
     } catch (Exception e) {
-      LOG.warn("Incident polling failed: {}", e.getMessage());
+      log.warn("Incident polling failed: {}", e.getMessage());
       return;
     }
 
@@ -47,7 +42,7 @@ public class IncidentPoller {
       repository.save(row);
       upserts++;
       if (previousState != null && !previousState.equals(row.getState())) {
-        LOG.info(
+        log.info(
             "Incident {} state transition: {} → {}",
             row.getIncidentKey(),
             previousState,
@@ -55,7 +50,7 @@ public class IncidentPoller {
       }
     }
     if (upserts > 0) {
-      LOG.debug("Polled and upserted {} incident(s)", upserts);
+      log.debug("Polled and upserted {} incident(s)", upserts);
     }
   }
 }

@@ -5,8 +5,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.Instant;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class UserTaskStatusEvent {
 
   @Id
@@ -20,8 +29,6 @@ public class UserTaskStatusEvent {
   private String assignee;
   private Instant occurredAt;
 
-  protected UserTaskStatusEvent() {}
-
   public UserTaskStatusEvent(
       Long userTaskKey,
       Long processInstanceKey,
@@ -29,58 +36,6 @@ public class UserTaskStatusEvent {
       String eventType,
       String assignee,
       Instant occurredAt) {
-    this.userTaskKey = userTaskKey;
-    this.processInstanceKey = processInstanceKey;
-    this.elementId = elementId;
-    this.eventType = eventType;
-    this.assignee = assignee;
-    this.occurredAt = occurredAt;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public Long getUserTaskKey() {
-    return userTaskKey;
-  }
-
-  public Long getProcessInstanceKey() {
-    return processInstanceKey;
-  }
-
-  public String getElementId() {
-    return elementId;
-  }
-
-  public String getEventType() {
-    return eventType;
-  }
-
-  public String getAssignee() {
-    return assignee;
-  }
-
-  public Instant getOccurredAt() {
-    return occurredAt;
-  }
-
-  @Override
-  public String toString() {
-    return "UserTaskStatusEvent{id="
-        + id
-        + ", userTaskKey="
-        + userTaskKey
-        + ", processInstanceKey="
-        + processInstanceKey
-        + ", elementId='"
-        + elementId
-        + "', eventType='"
-        + eventType
-        + "', assignee='"
-        + assignee
-        + "', occurredAt="
-        + occurredAt
-        + "}";
+    this(null, userTaskKey, processInstanceKey, elementId, eventType, assignee, occurredAt);
   }
 }

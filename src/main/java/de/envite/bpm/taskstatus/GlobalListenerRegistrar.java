@@ -2,24 +2,21 @@ package de.envite.bpm.taskstatus;
 
 import io.camunda.client.CamundaClient;
 import io.camunda.client.api.search.enums.GlobalTaskListenerEventType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class GlobalListenerRegistrar implements ApplicationRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(GlobalListenerRegistrar.class);
-  static final String LISTENER_ID = "task-status-tracker";
-  static final String JOB_TYPE = "task-status-tracker";
+  private static final String LISTENER_ID = "task-status-tracker";
+  private static final String JOB_TYPE = "task-status-tracker";
 
   private final CamundaClient camundaClient;
-
-  public GlobalListenerRegistrar(CamundaClient camundaClient) {
-    this.camundaClient = camundaClient;
-  }
 
   @Override
   public void run(ApplicationArguments args) {
@@ -31,13 +28,13 @@ public class GlobalListenerRegistrar implements ApplicationRunner {
           .eventTypes(GlobalTaskListenerEventType.ALL)
           .send()
           .join();
-      LOG.info(
+      log.info(
           "Registered global user task listener '{}' (jobType='{}', events=ALL)",
           LISTENER_ID,
           JOB_TYPE);
     } catch (Exception e) {
       if (isConflict(e)) {
-        LOG.info(
+        log.info(
             "Global user task listener '{}' already exists; updating to ensure config matches",
             LISTENER_ID);
         camundaClient

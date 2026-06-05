@@ -4,20 +4,16 @@ import io.camunda.client.annotation.JobWorker;
 import io.camunda.client.api.response.ActivatedJob;
 import io.camunda.client.api.response.UserTaskProperties;
 import java.time.Instant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class TaskStatusTrackerWorker {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TaskStatusTrackerWorker.class);
-
   private final UserTaskStatusEventRepository repository;
-
-  public TaskStatusTrackerWorker(UserTaskStatusEventRepository repository) {
-    this.repository = repository;
-  }
 
   @JobWorker(type = "task-status-tracker", autoComplete = true)
   public void track(final ActivatedJob job) {
@@ -35,6 +31,6 @@ public class TaskStatusTrackerWorker {
             Instant.now());
 
     UserTaskStatusEvent saved = repository.save(event);
-    LOG.info("Tracked user task event: {}", saved);
+    log.info("Tracked user task event: {}", saved);
   }
 }

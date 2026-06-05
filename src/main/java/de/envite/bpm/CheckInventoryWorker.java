@@ -7,14 +7,13 @@ import io.camunda.client.api.response.ActivatedJob;
 import io.camunda.client.api.worker.JobClient;
 import jakarta.annotation.Nullable;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class CheckInventoryWorker {
 
-  private static final Logger LOG = LoggerFactory.getLogger(CheckInventoryWorker.class);
   static final String FAIL_SENTINEL = "FAIL_INCIDENT";
 
   @JobWorker(type = "check-inventory", autoComplete = false)
@@ -25,7 +24,7 @@ public class CheckInventoryWorker {
     String item = (itemOrdered == null || itemOrdered.isEmpty()) ? "default-item" : itemOrdered;
 
     if (FAIL_SENTINEL.equals(item)) {
-      LOG.warn(
+      log.warn(
           "Sentinel '{}' received — failing job {} with retries=0 to raise an incident",
           FAIL_SENTINEL,
           job.getKey());
@@ -37,13 +36,13 @@ public class CheckInventoryWorker {
             .send()
             .join();
       } catch (ClientStatusException e) {
-        LOG.error("Failed to mark job {} as failed", job.getKey(), e);
+        log.error("Failed to mark job {} as failed", job.getKey(), e);
       }
       return;
     }
 
-    LOG.info("Checking inventory for item: {}", item);
+    log.info("Checking inventory for item: {}", item);
     jobClient.newCompleteCommand(job).variables(Map.of("item", item + " allocated")).send().join();
-    LOG.info("check-inventory completed for job: {}", job.getKey());
+    log.info("check-inventory completed for job: {}", job.getKey());
   }
 }

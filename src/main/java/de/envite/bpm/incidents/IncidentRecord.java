@@ -5,15 +5,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "incident_record")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IncidentRecord {
 
   @Id private Long incidentKey;
-
   private Long processDefinitionKey;
   private String processDefinitionId;
   private Long processInstanceKey;
@@ -29,11 +34,9 @@ public class IncidentRecord {
   private String state;
   private Long jobKey;
   private String tenantId;
-
   private Instant lastSyncedAt;
 
-  protected IncidentRecord() {}
-
+  @Transient
   public void populateFrom(Incident inc, Instant syncedAt) {
     this.incidentKey = inc.getIncidentKey();
     this.processDefinitionKey = inc.getProcessDefinitionKey();
@@ -49,78 +52,5 @@ public class IncidentRecord {
     this.jobKey = inc.getJobKey();
     this.tenantId = inc.getTenantId();
     this.lastSyncedAt = syncedAt;
-  }
-
-  public Long getIncidentKey() {
-    return incidentKey;
-  }
-
-  public Long getProcessDefinitionKey() {
-    return processDefinitionKey;
-  }
-
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
-  }
-
-  public Long getProcessInstanceKey() {
-    return processInstanceKey;
-  }
-
-  public Long getRootProcessInstanceKey() {
-    return rootProcessInstanceKey;
-  }
-
-  public String getErrorType() {
-    return errorType;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  public String getElementId() {
-    return elementId;
-  }
-
-  public Long getElementInstanceKey() {
-    return elementInstanceKey;
-  }
-
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
-
-  public String getState() {
-    return state;
-  }
-
-  public Long getJobKey() {
-    return jobKey;
-  }
-
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public Instant getLastSyncedAt() {
-    return lastSyncedAt;
-  }
-
-  @Override
-  public String toString() {
-    return "IncidentRecord{incidentKey="
-        + incidentKey
-        + ", processInstanceKey="
-        + processInstanceKey
-        + ", elementId='"
-        + elementId
-        + "', errorType='"
-        + errorType
-        + "', state='"
-        + state
-        + "', lastSyncedAt="
-        + lastSyncedAt
-        + "}";
   }
 }

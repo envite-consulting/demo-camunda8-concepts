@@ -63,10 +63,4 @@ case "$ARG" in
   record-count)
     run_sql "SELECT COUNT(*) AS record_count FROM incident_record;"
     ;;
-  "")
-    run_sql "SELECT id, user_task_key, process_instance_key, element_id, event_type, assignee, occurred_at FROM user_task_status_event ORDER BY id;"
-    ;;
-  *)
-    run_sql "$ARG"
-    ;;
 esac
