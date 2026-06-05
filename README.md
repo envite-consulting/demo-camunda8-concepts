@@ -88,12 +88,13 @@ You should see, in the Spring Boot log:
 **4. Drive a happy-path instance**:
 
 ```bash
-PI=$(c8ctl --json create pi --bpmnProcessId demo-camunda-jboss-plugin-replacement-process \
-       --variables '{"item":"book"}' 2>/dev/null | jq -r '.key')
-UT=$(c8ctl --json list ut --state created 2>/dev/null \
-       | jq -r '.[] | select(.["Process Instance"]=="'"$PI"'") | .Key' | head -1)
-c8ctl complete ut "$UT"
-c8ctl --json get pi "$PI" | jq '{state, endDate}'  # → "COMPLETED"
+c8ctl --json create pi --bpmnProcessId demo-camunda-jboss-plugin-replacement-process --variables '{"item":"book"}'
+# copy key from process instance above (processInstanceKey)
+c8ctl --json list ut --state created
+# copy key from user task above (userTaskKey)
+c8ctl complete ut "userTaskKey"
+c8ctl --json get pi "processInstanceKey"
+# check that status is COMPLETED
 ```
 
 ---
