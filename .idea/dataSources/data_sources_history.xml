@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-261.25134.95">
-    <data-source name="H2 - Task Status (in-memory via TCP)" uuid="c4e0b8f0-1234-5678-9abc-def012345678">
+<DataSourcesHistory>
+  <DataSourceFromHistory isRemovedFromProject="false">
+    <data-source source="LOCAL" name="H2 - Task Status (in-memory via TCP)" uuid="c4e0b8f0-1234-5678-9abc-def012345678">
       <database-info product="H2" version="2.4.240 (2025-09-22)" jdbc-version="4.3" driver-name="H2 JDBC Driver" driver-version="2.3.232 (2024-08-11)" dbms="H2" exact-version="2.4.240" exact-driver-version="2.3">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:tcp://localhost:9092/mem:taskstatus</jdbc-url>
       <secret-storage>forget</secret-storage>
       <user-name>sa</user-name>
       <schema-mapping />
+      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-  </component>
-</project>
+  </DataSourceFromHistory>
+</DataSourcesHistory>
