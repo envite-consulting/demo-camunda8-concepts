@@ -1,4 +1,4 @@
-# demo-camunda-jboss-plugin-replacement
+# demo-camunda8-concepts
 
 Spring Boot 4 demo for a **self-managed Camunda 8** cluster (`io.camunda.client`, gRPC + REST — not Camunda 7, not SaaS). It runs the job workers for a small "Process Order" BPMN process and mirrors Camunda runtime data into an in-memory H2 database:
 
@@ -12,7 +12,7 @@ Rows 2 and 3 solve the same problem two ways. The paths are independent — each
 
 ## BPMN process
 
-`src/main/resources/process.bpmn`, id `demo-camunda-jboss-plugin-replacement-process`:
+`src/main/resources/process.bpmn`, id `demo-camunda8-concepts-process`:
 
 ```
 (Start)──▶[Approve order]──▶[Check inventory]──▶[Charge payment method]──▶[Ship items]──▶(End)
@@ -67,7 +67,7 @@ Startup log checklist:
 **4. Drive a happy-path instance** — this also exercises the user-task listener:
 
 ```bash
-c8ctl --json create pi --bpmnProcessId demo-camunda-jboss-plugin-replacement-process --variables '{"item":"book"}'
+c8ctl --json create pi --bpmnProcessId demo-camunda8-concepts-process --variables '{"item":"book"}'
 # listener fired: one CREATING row for the started process instance
 ./check-h2.sh latest
 c8ctl --json list ut --state created
@@ -112,7 +112,7 @@ Ports when app + cluster are running:
 Produce an incident on demand with the sentinel `item = FAIL_INCIDENT`; `CheckInventoryWorker` then fails the job with retries=0:
 
 ```bash
-c8ctl --json create pi --bpmnProcessId demo-camunda-jboss-plugin-replacement-process --variables '{"item":"FAIL_INCIDENT"}'
+c8ctl --json create pi --bpmnProcessId demo-camunda8-concepts-process --variables '{"item":"FAIL_INCIDENT"}'
 c8ctl --json list ut --state created
 # token reaches check-inventory → incident
 c8ctl complete ut "$UT"

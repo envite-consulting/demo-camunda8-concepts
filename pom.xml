@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.envite.bpm</groupId>
-  <artifactId>demo-camunda-jboss-plugin-replacement</artifactId>
+  <artifactId>demo-camunda8-concepts</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>

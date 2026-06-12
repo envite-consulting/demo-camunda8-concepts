@@ -22,7 +22,7 @@ Running the app requires a self-managed Camunda 8 cluster reachable at gRPC `127
 
 ## Architecture
 
-**Job worker ↔ BPMN task-type contract.** The process model is `src/main/resources/process.bpmn` (process id `demo-camunda-jboss-plugin-replacement-process`). Each `<serviceTask>` declares a `zeebe:taskDefinition type="..."`, and each worker method is annotated `@JobWorker(type = "...")`. These two `type` strings are the *only* link between the model and the code and must match exactly — changing a task type in one place requires the same change in the other.
+**Job worker ↔ BPMN task-type contract.** The process model is `src/main/resources/process.bpmn` (process id `demo-camunda8-concepts-process`). Each `<serviceTask>` declares a `zeebe:taskDefinition type="..."`, and each worker method is annotated `@JobWorker(type = "...")`. These two `type` strings are the *only* link between the model and the code and must match exactly — changing a task type in one place requires the same change in the other.
 
 | BPMN service task | type | Worker | Behavior |
 |---|---|---|---|

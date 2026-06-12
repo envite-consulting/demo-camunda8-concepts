@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_16mvwsb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.44.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
-  <bpmn:process id="demo-camunda-jboss-plugin-replacement-process" name="Process Order" isExecutable="true">
+  <bpmn:process id="demo-camunda8-concepts-process" name="Process Order" isExecutable="true">
     <bpmn:startEvent id="orderReceived" name="Order received">
       <bpmn:outgoing>Flow_StartToApprove</bpmn:outgoing>
     </bpmn:startEvent>
@@ -42,7 +42,7 @@
     </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="demo-camunda-jboss-plugin-replacement-process">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="demo-camunda8-concepts-process">
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="orderReceived">
         <dc:Bounds x="182" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
